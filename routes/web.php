@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ObatController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +15,30 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::middleware(['guest'])->group(function () {
+    Route::get("/", [AuthController::class,"index"])->name("login");
+    Route::post("/", [AuthController::class,"auth"])->name("login-auth");
 
-Route::get('/', function () {
-    return view('welcome');
 });
+
+Route::middleware(['auth','role:admin'])->group(function () {
+
+    //dashboard
+    Route::get('/dashboard', [DashboardController::class,'index'])->name('dahboard');
+
+    //account setting
+    Route::get('/akun', [DashboardController::class,'akun'])->name('akun-setting');
+    Route::post('/akun', [DashboardController::class,'upload_foto'])->name('upload-foto');
+    Route::post('/akun/update', [DashboardController::class,'update'])->name('update-akun');
+
+    //CRUD obat
+    Route::get('/obat', [ObatController::class, 'index'])->name('index-obat');
+    Route::get('/dataobat', [ObatController::class, 'datatables'])->name('data-obat');
+    Route::get('/obatbyid/{id}', [ObatController::class, 'get_dataobat_by_id'])->name('data-obat-byid');
+    Route::post('/dataobat/create', [ObatController::class, 'create'])->name('create-obat');
+    Route::post('/dataobat/update', [ObatController::class, 'update'])->name('update-obat');
+    Route::post('/dataobat/delete', [ObatController::class, 'delete'])->name('delete-obat');
+
+    //logout
+});
+Route::get("/logout", [AuthController::class, "logout"])->name("logout");
