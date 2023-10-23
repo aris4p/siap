@@ -15,7 +15,7 @@
                     <button class="btn btn-primary btn-lg" id="tambahobat"  aria-pressed="true">Tambah Data Obat</button>
                 </div>
                 <div class="table-responsive text-nowrap">
-                    <table id="myTable" class="table table-striped" style="width:100%">
+                    <table id="myTable" class="table table-striped nowrap" style="width:100%">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -368,13 +368,16 @@
             <script src="https://code.jquery.com/jquery-3.7.0.js" ></script>
             <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js" ></script>
             <script src="//cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js" ></script>
+            <script src="//cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js" ></script>
+            <script src="//cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js" ></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
                 let datatable
                 $(document).ready(function(){
                     datatable =  $('#myTable').DataTable({
                         processing:true,
-                        serverSide:true,
+                        serverside:true,
+                        responsive:true,
                         ajax:"{{ route('data-obat') }}",
                         columns:[
                         { data:'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },

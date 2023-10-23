@@ -14,8 +14,9 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset ('assets/admin_template/img/favicon/favicon.ico') }}" />
     {{-- datatables --}}
-    <link rel="stylesheet" href="///cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,6 +24,9 @@
     href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
     />
+
+    {{-- toastify --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="{{ asset ('assets/admin_template/vendor/fonts/boxicons.css') }}" />
@@ -135,16 +139,19 @@
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Pages</span>
                 </li>
+                @if(Auth::user()->hasRole('admin') || Auth::user()->can('lihat-obat'))
                 <li class="menu-item">
                     <a href="{{ route('index-obat') }}" class="menu-link ">
                         <i class="menu-icon tf-icons bx bx-dock-top"></i>
                         <div data-i18n="Data Obat">Data Obat</div>
                     </a>
                 </li>
+                @endif
+
                 <li class="menu-item">
-                    <a href="#" class="menu-link ">
+                    <a href="{{ route('index-pengguna') }}" class="menu-link ">
                         <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                        <div data-i18n="Transaksi">Transaksi</div>
+                        <div data-i18n="setting">Pengaturan Pengguna</div>
                     </a>
                 </li>
 

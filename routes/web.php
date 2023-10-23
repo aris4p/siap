@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ObatController;
+use App\Http\Controllers\PenggunaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,7 @@ Route::middleware(['guest'])->group(function () {
 
 });
 
-Route::middleware(['auth','role:admin'])->group(function () {
+Route::middleware(['auth','role:admin|apoteker'])->group(function () {
 
     //dashboard
     Route::get('/dashboard', [DashboardController::class,'index'])->name('dahboard');
@@ -39,6 +40,18 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::post('/dataobat/update', [ObatController::class, 'update'])->name('update-obat');
     Route::post('/dataobat/delete', [ObatController::class, 'delete'])->name('delete-obat');
 
-    //logout
 });
-Route::get("/logout", [AuthController::class, "logout"])->name("logout");
+
+
+Route::middleware(['auth','role:admin'])->group(function () {
+    //Pengguna
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('index-pengguna');
+    Route::get('/pengguna/role/{id}', [PenggunaController::class, 'role'])->name('role-pengguna');
+    Route::post('/pengguna/role', [PenggunaController::class, 'give_permission'])->name('permission-pengguna');
+    
+});
+Route::middleware(['auth'])->group(function () {
+    //logout
+    Route::get("/logout", [AuthController::class, "logout"])->name("logout");
+    
+});
