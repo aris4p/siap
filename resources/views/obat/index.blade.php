@@ -359,10 +359,11 @@
                         </div>
                     </div>
                 </div>
+</div>
 
 
-            </div>
-            <!-- Content wrapper -->
+</div>
+<!-- Content wrapper -->
 
 
             <script src="https://code.jquery.com/jquery-3.7.0.js" ></script>
@@ -585,8 +586,5 @@
                         }
                     });
                 });
-
-
-            </script>
-
-            @endsection
+</script>
+@endsection

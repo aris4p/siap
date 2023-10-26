@@ -139,21 +139,27 @@
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Pages</span>
                 </li>
-                @if(Auth::user()->hasRole('admin') || Auth::user()->can('lihat-obat'))
                 <li class="menu-item">
                     <a href="{{ route('index-obat') }}" class="menu-link ">
                         <i class="menu-icon tf-icons bx bx-dock-top"></i>
                         <div data-i18n="Data Obat">Data Obat</div>
                     </a>
                 </li>
-                @endif
-
+                <li class="menu-item">
+                    <a href="{{ route('index-supplier') }}" class="menu-link ">
+                        <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                        <div data-i18n="Data Supplier">Data Supplier</div>
+                    </a>
+                </li>
+                
+                @if(Auth::user()->hasRole('admin'))
                 <li class="menu-item">
                     <a href="{{ route('index-pengguna') }}" class="menu-link ">
                         <i class="menu-icon tf-icons bx bx-dock-top"></i>
                         <div data-i18n="setting">Pengaturan Pengguna</div>
                     </a>
                 </li>
+                @endif
 
             </aside>
             <!-- / Menu -->

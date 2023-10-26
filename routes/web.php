@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,12 +44,22 @@ Route::middleware(['auth','role:admin|apoteker'])->group(function () {
 });
 
 
+
 Route::middleware(['auth','role:admin'])->group(function () {
     //Pengguna
     Route::get('/pengguna', [PenggunaController::class, 'index'])->name('index-pengguna');
     Route::get('/pengguna/role/{id}', [PenggunaController::class, 'role'])->name('role-pengguna');
     Route::post('/pengguna/role', [PenggunaController::class, 'give_permission'])->name('permission-pengguna');
+    Route::post('/pengguna/role/ubah', [PenggunaController::class, 'give_roles'])->name('roles-pengguna');
+    Route::post('/pengguna/role/hapus', [PenggunaController::class, 'hapus_roles'])->name('hapusRole-pengguna');
     
+    //Supplier
+    Route::get('/supplier', [SupplierController::class, 'index'])->name('index-supplier');
+    Route::get('/datasupplier', [SupplierController::class, 'datatables'])->name('data-supplier');
+    Route::get('/getsupplier/{id}', [SupplierController::class, 'get_supplier_byid'])->name('getsupplierbyid-supplier');
+    Route::post('/supplier/create', [SupplierController::class, 'create'])->name('create-supplier');
+    Route::post('/supplier/update', [SupplierController::class, 'update'])->name('update-supplier');
+    Route::post('/supplier/delete', [SupplierController::class, 'delete'])->name('delete-supplier');
 });
 Route::middleware(['auth'])->group(function () {
     //logout

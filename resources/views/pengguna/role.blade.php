@@ -25,11 +25,22 @@
               <td class="text-nowrap">Role</td>
               <td>
                 <div class="form-check d-flex justify-content-center">
-                  <select id="sendNotification" class="form-select" name="sendNotification">
-                    <option selected="">Pilih Role</option>
-                    <option>Admin</option>
-                    <option>apoteker</option>
+                  <input type="hidden" id="userID"  value="{{ $user->id }}">
+                  <select id="roles" class="form-select" name="roles">
+                    <option selected="">Tidak Ada Role</option>
+                    <option value="admin">Admin</option>
+                    <option value="apoteker">Apoteker</option>
                   </select>
+                </div>
+              </td>
+              <td>
+                <div class="form-check d-flex justify-content-center">
+                  <button id="ubahRoles" class="btn btn-primary"> Ubah Role </button>
+                </div>
+              </td>
+              <td>
+                <div class="form-check d-flex justify-content-center">
+                  <button id="hapusRoles" class="btn btn-primary"> Hapus Role </button>
                 </div>
               </td>
               
@@ -109,6 +120,97 @@
   <script type="text/javascript" src="//cdn.jsdelivr.net/npm/toastify-js"></script>
   <script>
     $(document).ready(function() {
+      // init csrf TOken
+      var csrfToken = $('meta[name="csrf-token"]').attr('content');
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': csrfToken
+        }
+      });
+      
+      // Roles
+      
+      // value user roles
+      // Mendapatkan nilai peran dari variabel PHP (misalnya, dari PHP blade)
+      var userRole = "{{ isset($user->roles[0]) ? $user->roles[0]->name : '' }}";
+      console.log(userRole);
+      // Mendapatkan elemen select berdasarkan ID
+      var selectElement = document.getElementById("roles");
+      console.log(selectElement);
+      
+      // Iterasi melalui opsi dalam elemen select
+      for (var i = 0; i < selectElement.options.length; i++) {
+        // Memeriksa apakah nilai opsi sama dengan nilai peran pengguna
+        if (selectElement.options[i].value === userRole) {
+          // Mengatur opsi sebagai yang terpilih
+          selectElement.options[i].selected = true;
+        }
+      }
+      
+      
+      // change roles
+      $('#ubahRoles').on('click', function(){
+        let role = document.getElementById('roles').value;
+        let userid = document.getElementById('userID').value;
+        
+        console.log(role);
+        
+        // Kirim permintaan Ajax untuk mengubah role di server
+        $.ajax({
+          type: 'POST', // Anda dapat menggunakan 'GET' atau 'POST' sesuai kebutuhan
+          url: "{{ route('roles-pengguna') }}", // Gantilah ini dengan rute Anda
+          data: {
+            user_id: userid,
+            roles: role,
+          },
+          success: function(response) {
+            Toastify({
+              
+              text: response.message,
+              
+              duration: 3000
+              
+            }).showToast();
+            
+          },
+          error: function(error) {
+            console.error('Terjadi kesalahan: ' + error);
+          }
+        });
+      });
+      // hapus roles
+      $('#hapusRoles').on('click', function(){
+        let role = document.getElementById('roles').value;
+        let userid = document.getElementById('userID').value;
+        
+        console.log(role);
+        
+        // Kirim permintaan Ajax untuk mengubah role di server
+        $.ajax({
+          type: 'POST', // Anda dapat menggunakan 'GET' atau 'POST' sesuai kebutuhan
+          url: "{{ route('hapusRole-pengguna') }}", // Gantilah ini dengan rute Anda
+          data: {
+            user_id: userid,
+            roles: role,
+          },
+          success: function(response) {
+            Toastify({
+              
+              text: response.message,
+              
+              duration: 3000
+              
+            }).showToast();
+            
+          },
+          error: function(error) {
+            console.error('Terjadi kesalahan: ' + error);
+          }
+        });
+      });
+      
+      
+      // Permission
       var permissions = "{{ $permissions }}";
       var checkboxes = document.querySelectorAll('.form-check-input'); // Mendapatkan semua elemen checkbox
       
@@ -121,12 +223,7 @@
         }
       });
       
-      var csrfToken = $('meta[name="csrf-token"]').attr('content');
-      $.ajaxSetup({
-        headers: {
-          'X-CSRF-TOKEN': csrfToken
-        }
-      });
+      
       // Ketika checkbox diubah
       $('#tambah-obat').on('change', function() {
         var isChecked = $(this).prop('checked');

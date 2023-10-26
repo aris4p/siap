@@ -23,15 +23,30 @@ class PenggunaController extends Controller
     }
 
     public function role($id){
-        $user = User::findOrFail($id);
-        
+        $user = User::with('roles')->findOrFail($id);
         $permission = $user->getDirectPermissions();
         $permissions = json_encode($permission);
+
         
         
         return view('pengguna.role', [
             'title' => "Pengguna Role"
         ], compact('user','permissions'));
+    }
+
+    public function give_roles(Request $request){
+        $user = User::findorFail($request->user_id);
+        $user->syncRoles([$request->roles]);
+        
+        return response()->json(['Message'=>$user]);
+
+    }
+
+    public function hapus_roles(Request $request){
+        $user = User::findorFail($request->user_id);
+        $user->removeRole($request->roles);
+
+        return response()->json(['message'=>"Berhasil hapus role !!!"]);
     }
 
     public function give_permission(Request $request){
